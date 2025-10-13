@@ -1,7 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
+/* Mobile-first responsive design */
+html {
+    font-size: 16px;
+}
+
+body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
+
 .slot-machine {
     font-family: 'Orbitron', monospace;
+    min-height: fit-content;
 }
 
 .reel {
@@ -68,4 +84,120 @@
 
 .lever:active {
     transform: translateY(20px);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+    .slot-machine {
+        margin: 0.5rem;
+        border-width: 2px;
+        border-radius: 1.5rem;
+    }
+    
+    .reel {
+        min-height: 5rem;
+        min-width: 4rem;
+    }
+    
+    .slot-symbol {
+        font-size: 2rem !important;
+        line-height: 1;
+    }
+    
+    /* Ensure touch targets are at least 44px */
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Optimize modals for mobile */
+    .fixed.inset-0 > div {
+        margin: 1rem !important;
+        max-width: calc(100vw - 2rem) !important;
+        max-height: calc(100vh - 2rem) !important;
+        overflow-y: auto;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .slot-machine {
+        padding: 1rem;
+        margin: 0.25rem;
+    }
+    
+    .text-center.mb-4 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .bg-black.rounded-lg {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .slot-symbol {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Touch-friendly improvements */
+.touch-manipulation {
+    touch-action: manipulation;
+}
+
+/* Prevent zoom on double tap */
+button, input, select, textarea {
+    touch-action: manipulation;
+}
+
+/* Improve button active states on mobile */
+@media (hover: none) and (pointer: coarse) {
+    button:hover {
+        transform: none;
+    }
+    
+    button:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+    
+    .lever:active {
+        transform: translateY(10px) scale(0.95);
+    }
+}
+
+/* Responsive font sizes */
+@media (max-width: 375px) {
+    html {
+        font-size: 14px;
+    }
+    
+    .slot-machine {
+        padding: 0.75rem;
+    }
+    
+    .slot-symbol {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+    .reel {
+        min-height: 4rem;
+        min-width: 3.5rem;
+    }
+    
+    .slot-symbol {
+        font-size: 1.5rem !important;
+    }
+    
+    .lever {
+        padding: 1rem 0.5rem !important;
+        font-size: 1rem !important;
+    }
 }

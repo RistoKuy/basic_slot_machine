@@ -8,36 +8,36 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gradient-casino min-h-screen flex items-center justify-center p-4">
-    <div class="slot-machine bg-gray-900 rounded-3xl p-8 shadow-2xl border-4 border-yellow-500 max-w-2xl w-full">
+    <div class="slot-machine bg-gray-900 rounded-3xl p-4 sm:p-8 shadow-2xl border-4 border-yellow-500 max-w-2xl w-full mx-auto">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-black text-yellow-400 mb-2 tracking-wider">🎰 SLOT MACHINE 🎰</h1>
-            <div class="text-yellow-300 text-lg font-bold">SPIN TO WIN!</div>
+        <div class="text-center mb-4 sm:mb-8">
+            <h1 class="text-2xl sm:text-4xl font-black text-yellow-400 mb-2 tracking-wider">🎰 SLOT MACHINE 🎰</h1>
+            <div class="text-yellow-300 text-base sm:text-lg font-bold">SPIN TO WIN!</div>
         </div>
         
         <!-- Credits Display -->
-        <div class="bg-black rounded-lg p-4 mb-6 border-2 border-yellow-500">
-            <div class="flex justify-between items-center text-yellow-400 font-bold text-xl">
+        <div class="bg-black rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 border-2 border-yellow-500">
+            <div class="flex justify-between items-center text-yellow-400 font-bold text-lg sm:text-xl">
                 <div>CREDITS: <span id="credits" class="text-green-400">100</span></div>
                 <div>BET: <span id="bet" class="text-red-400">10</span></div>
             </div>
         </div>
         
         <!-- Slot Reels -->
-        <div class="bg-black rounded-xl p-6 mb-6 border-4 border-yellow-600">
-            <div class="flex justify-center space-x-4">
+        <div class="bg-black rounded-xl p-3 sm:p-6 mb-4 sm:mb-6 border-4 border-yellow-600">
+            <div class="flex justify-center space-x-2 sm:space-x-4">
                 <div class="reel-container bg-gray-800 rounded-lg border-2 border-yellow-500 overflow-hidden">
-                    <div id="reel1" class="reel h-24 w-20 flex flex-col items-center justify-center text-4xl">
+                    <div id="reel1" class="reel h-20 w-16 sm:h-24 sm:w-20 flex flex-col items-center justify-center text-3xl sm:text-4xl">
                         <div class="slot-symbol">🍒</div>
                     </div>
                 </div>
                 <div class="reel-container bg-gray-800 rounded-lg border-2 border-yellow-500 overflow-hidden">
-                    <div id="reel2" class="reel h-24 w-20 flex flex-col items-center justify-center text-4xl">
+                    <div id="reel2" class="reel h-20 w-16 sm:h-24 sm:w-20 flex flex-col items-center justify-center text-3xl sm:text-4xl">
                         <div class="slot-symbol">🍋</div>
                     </div>
                 </div>
                 <div class="reel-container bg-gray-800 rounded-lg border-2 border-yellow-500 overflow-hidden">
-                    <div id="reel3" class="reel h-24 w-20 flex flex-col items-center justify-center text-4xl">
+                    <div id="reel3" class="reel h-20 w-16 sm:h-24 sm:w-20 flex flex-col items-center justify-center text-3xl sm:text-4xl">
                         <div class="slot-symbol">🍊</div>
                     </div>
                 </div>
@@ -45,29 +45,29 @@
         </div>
         
         <!-- Controls -->
-        <div class="flex justify-center space-x-4 mb-6">
-            <button id="decreaseBet" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+        <div class="flex justify-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+            <button id="decreaseBet" class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold py-3 px-4 sm:py-2 sm:px-4 rounded-lg transition-colors touch-manipulation">
                 BET -
             </button>
-            <button id="increaseBet" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+            <button id="increaseBet" class="bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-3 px-4 sm:py-2 sm:px-4 rounded-lg transition-colors touch-manipulation">
                 BET +
             </button>
         </div>
         
         <!-- Spin Button -->
-        <div class="text-center mb-6">
-            <button id="spinButton" class="lever bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-black text-2xl py-4 px-12 rounded-full shadow-lg border-4 border-yellow-300 transform hover:scale-105 transition-all duration-200">
+        <div class="text-center mb-4 sm:mb-6">
+            <button id="spinButton" class="lever bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 active:from-yellow-600 active:to-yellow-800 text-black font-black text-lg sm:text-2xl py-5 px-8 sm:py-4 sm:px-12 rounded-full shadow-lg border-4 border-yellow-300 transform hover:scale-105 active:scale-95 transition-all duration-200 touch-manipulation min-h-[60px]">
                 🎰 SPIN 🎰
             </button>
         </div>
         
         <!-- Win Display -->
-        <div id="winDisplay" class="text-center text-2xl font-bold text-green-400 h-8 mb-4"></div>
+        <div id="winDisplay" class="text-center text-lg sm:text-2xl font-bold text-green-400 h-6 sm:h-8 mb-3 sm:mb-4"></div>
         
         <!-- Paytable -->
-        <div class="bg-gray-800 rounded-lg p-4 border-2 border-yellow-500">
-            <h3 class="text-yellow-400 font-bold text-center mb-3">PAYTABLE</h3>
-            <div class="grid grid-cols-2 gap-2 text-sm text-yellow-300">
+        <div class="bg-gray-800 rounded-lg p-3 sm:p-4 border-2 border-yellow-500">
+            <h3 class="text-yellow-400 font-bold text-center mb-2 sm:mb-3 text-sm sm:text-base">PAYTABLE</h3>
+            <div class="grid grid-cols-2 gap-1 sm:gap-2 text-xs sm:text-sm text-yellow-300">
                 <div>🍒🍒🍒 = 50x</div>
                 <div>🍋🍋🍋 = 30x</div>
                 <div>🍊🍊🍊 = 20x</div>

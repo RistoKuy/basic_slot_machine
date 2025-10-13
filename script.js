@@ -288,7 +288,7 @@ class ProgressiveJackpot {
         const header = document.querySelector('h1');
         const jackpotDisplay = document.createElement('div');
         jackpotDisplay.id = 'jackpotDisplay';
-        jackpotDisplay.className = 'text-2xl font-bold text-yellow-300 mt-2 animate-pulse';
+        jackpotDisplay.className = 'text-lg sm:text-2xl font-bold text-yellow-300 mt-2 animate-pulse';
         jackpotDisplay.textContent = `JACKPOT: ${this.jackpot}`;
         header.parentNode.insertBefore(jackpotDisplay, header.nextSibling);
     }
@@ -421,11 +421,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Helper functions
 function showStatsModal(gameStats) {
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+    modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
     modal.innerHTML = `
-        <div class="bg-gray-900 rounded-lg p-8 border-4 border-yellow-500 max-w-md">
-            <h3 class="text-2xl font-bold text-yellow-400 mb-4 text-center">GAME STATISTICS</h3>
-            <div class="text-yellow-300 space-y-2">
+        <div class="bg-gray-900 rounded-lg p-4 sm:p-8 border-4 border-yellow-500 max-w-md w-full max-h-full overflow-y-auto">
+            <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 text-center">GAME STATISTICS</h3>
+            <div class="text-yellow-300 space-y-2 text-sm sm:text-base">
                 <div>Total Spins: <span class="text-white">${gameStats.stats.totalSpins}</span></div>
                 <div>Total Wins: <span class="text-green-400">${gameStats.stats.totalWins}</span></div>
                 <div>Win Rate: <span class="text-blue-400">${gameStats.getWinRate()}%</span></div>
@@ -435,7 +435,7 @@ function showStatsModal(gameStats) {
                 <div>Biggest Win: <span class="text-yellow-400">${gameStats.stats.biggestWin}</span></div>
                 <div>Win Streak: <span class="text-purple-400">${gameStats.stats.winStreak}</span></div>
             </div>
-            <button id="closeStats" class="mt-6 bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-2 px-6 rounded-lg w-full">
+            <button id="closeStats" class="mt-6 bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black font-bold py-3 px-6 rounded-lg w-full min-h-[44px] touch-manipulation">
                 CLOSE
             </button>
         </div>
@@ -456,15 +456,15 @@ function showStatsModal(gameStats) {
 
 function showInstructions() {
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+    modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
     modal.innerHTML = `
-        <div class="bg-gray-900 rounded-lg p-8 border-4 border-yellow-500 max-w-lg">
-            <h3 class="text-2xl font-bold text-yellow-400 mb-4 text-center">🎰 HOW TO PLAY 🎰</h3>
-            <div class="text-yellow-300 space-y-3 text-sm">
-                <div>• Click <strong>SPIN</strong> or press <strong>SPACEBAR</strong> to play</div>
+        <div class="bg-gray-900 rounded-lg p-4 sm:p-8 border-4 border-yellow-500 max-w-lg w-full max-h-full overflow-y-auto">
+            <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 text-center">🎰 HOW TO PLAY 🎰</h3>
+            <div class="text-yellow-300 space-y-3 text-xs sm:text-sm">
+                <div>• Tap <strong>SPIN</strong> or press <strong>SPACEBAR</strong> to play</div>
                 <div>• Use <strong>BET +/-</strong> buttons to adjust your bet (5-50)</div>
                 <div>• Match 3 symbols to win credits!</div>
-                <div>• <strong>Double-click SPIN</strong> for auto-play (10 spins)</div>
+                <div>• <strong>Double-tap SPIN</strong> for auto-play (10 spins)</div>
                 <div>• Press <strong>'S'</strong> to view statistics</div>
                 <div>• Try the <strong>Konami Code</strong> for bonus credits! ↑↑↓↓←→←→BA</div>
                 <div class="border-t border-yellow-600 pt-3 mt-3">
@@ -472,7 +472,7 @@ function showInstructions() {
                     <div class="text-center">Get 🎰🎰🎰 for a chance at the progressive jackpot!</div>
                 </div>
             </div>
-            <button id="closeInstructions" class="mt-6 bg-yellow-600 hover:bg-yellow-700 text-black font-bold py-2 px-6 rounded-lg w-full">
+            <button id="closeInstructions" class="mt-6 bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black font-bold py-3 px-6 rounded-lg w-full min-h-[44px] touch-manipulation">
                 LET'S PLAY!
             </button>
         </div>
