@@ -22,10 +22,28 @@ body {
 
 .reel {
     animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.3s ease;
+}
+
+.reel-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
 }
 
 .reel-spinning {
-    animation: spin 2s ease-out;
+    transform-style: preserve-3d;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 1) !important;
+    animation: reelGlow 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes reelGlow {
+    0% { 
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    100% { 
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1), inset 0 0 15px rgba(255, 215, 0, 0.5);
+    }
 }
 
 .reel-1 { animation-delay: 0s; }
@@ -33,9 +51,61 @@ body {
 .reel-3 { animation-delay: 0.4s; }
 
 @keyframes spin {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-400px); }
-    100% { transform: translateY(0); }
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    25% { transform: rotateX(90deg) rotateY(90deg); }
+    50% { transform: rotateX(180deg) rotateY(180deg); }
+    75% { transform: rotateX(270deg) rotateY(270deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* Spinning symbol effect - shows active randomization */
+.reel-spinning .slot-symbol {
+    animation: symbolRandomize 0.05s infinite;
+    text-shadow: 0 0 10px currentColor;
+    transform-origin: center;
+    filter: brightness(1.2);
+}
+
+@keyframes symbolRandomize {
+    0% { 
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+    }
+    25% { 
+        transform: scale(1.1) rotateZ(5deg);
+        opacity: 0.9;
+    }
+    50% { 
+        transform: scale(0.9) rotateZ(-5deg);
+        opacity: 1;
+    }
+    75% { 
+        transform: scale(1.05) rotateZ(3deg);
+        opacity: 0.95;
+    }
+    100% { 
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+    }
+}
+
+/* Symbol flash effect for visibility during spinning */
+.symbol-flash {
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6) !important;
+    animation: flash 0.08s ease-in-out !important;
+}
+
+@keyframes flash {
+    0% { 
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 70%);
+        transform: scale(1.1);
+    }
+    100% { 
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+        transform: scale(1);
+    }
 }
 
 .glow {

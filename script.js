@@ -85,6 +85,15 @@ class SlotMachine {
         this.winDisplay.textContent = '';
         this.updateDisplay();
         
+        // Clean up any existing intervals first
+        [this.reel1, this.reel2, this.reel3].forEach(reel => {
+            if (reel.spinInterval) {
+                clearInterval(reel.spinInterval);
+                reel.spinInterval = null;
+            }
+            reel.classList.remove('reel-spinning');
+        });
+        
         // Play spin sound effect
         try {
             this.spinSound.currentTime = 0;
@@ -104,9 +113,9 @@ class SlotMachine {
         ];
         
         // Stop reels one by one with delay
-        await this.stopReel(this.reel1, results[0], 2000);
-        await this.stopReel(this.reel2, results[1], 2200);
-        await this.stopReel(this.reel3, results[2], 2400);
+        await this.stopReel(this.reel1, results[0], 1500);
+        await this.stopReel(this.reel2, results[1], 1800);
+        await this.stopReel(this.reel3, results[2], 2100);
         
         // Check for wins
         this.checkWin(results);
@@ -121,11 +130,36 @@ class SlotMachine {
         reels.forEach((reel, index) => {
             reel.classList.add('reel-spinning', `reel-${index + 1}`);
             
-            // Create spinning effect by rapidly changing symbols
+            // Create continuous spinning until manually stopped
+            let spinSpeed = 50; // Consistent speed
+            
             const spinInterval = setInterval(() => {
+                // Only continue if still spinning
+                if (!reel.classList.contains('reel-spinning')) {
+                    clearInterval(spinInterval);
+                    return;
+                }
+                
                 const symbol = reel.querySelector('.slot-symbol');
+                
+                // Immediately change to random symbol
                 symbol.textContent = this.getRandomSymbol();
-            }, 100);
+                
+                // Add instant visual feedback
+                symbol.style.transform = 'scale(1.1)';
+                symbol.style.textShadow = '0 0 12px currentColor';
+                symbol.style.filter = 'brightness(1.3)';
+                
+                // Quick reset for next change
+                setTimeout(() => {
+                    if (reel.classList.contains('reel-spinning')) {
+                        symbol.style.transform = 'scale(1)';
+                        symbol.style.textShadow = '0 0 8px currentColor';
+                        symbol.style.filter = 'brightness(1.1)';
+                    }
+                }, 20);
+                
+            }, spinSpeed);
             
             // Store interval for cleanup
             reel.spinInterval = spinInterval;
@@ -135,21 +169,47 @@ class SlotMachine {
     async stopReel(reel, finalSymbol, delay) {
         return new Promise(resolve => {
             setTimeout(() => {
-                // Clear spinning interval
-                clearInterval(reel.spinInterval);
-                
-                // Set final symbol
-                const symbol = reel.querySelector('.slot-symbol');
-                symbol.textContent = finalSymbol;
-                
-                // Remove spinning animation
+                // First remove the spinning class to stop the interval
                 reel.classList.remove('reel-spinning');
                 
-                // Add landing effect
-                reel.classList.add('animate-bounce');
+                // Clear the interval if it exists
+                if (reel.spinInterval) {
+                    clearInterval(reel.spinInterval);
+                    reel.spinInterval = null;
+                }
+                
+                // Set final symbol with dramatic effect
+                const symbol = reel.querySelector('.slot-symbol');
+                
+                // Clear any existing styles and add transition
+                symbol.style.transition = 'all 0.4s ease-out';
+                symbol.style.transform = 'scale(1.5)';
+                symbol.style.textShadow = '0 0 25px currentColor';
+                symbol.style.filter = 'brightness(2.5) drop-shadow(0 0 20px currentColor)';
+                
+                // Set the final symbol after a brief pause
                 setTimeout(() => {
-                    reel.classList.remove('animate-bounce');
-                }, 600);
+                    symbol.textContent = finalSymbol;
+                }, 100);
+                
+                // Return to normal size
+                setTimeout(() => {
+                    symbol.style.transform = 'scale(1)';
+                    symbol.style.textShadow = '';
+                    symbol.style.filter = '';
+                }, 300);
+                
+                // Add bounce effect
+                setTimeout(() => {
+                    reel.classList.add('animate-bounce');
+                    setTimeout(() => {
+                        reel.classList.remove('animate-bounce');
+                        symbol.style.transition = '';
+                        symbol.style.transform = '';
+                        symbol.style.textShadow = '';
+                        symbol.style.filter = '';
+                    }, 600);
+                }, 500);
                 
                 resolve();
             }, delay);
