@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+.slot-machine {
+    font-family: 'Orbitron', monospace;
+}
+
+.reel {
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reel-spinning {
+    animation: spin 2s ease-out;
+}
+
+.reel-1 { animation-delay: 0s; }
+.reel-2 { animation-delay: 0.2s; }
+.reel-3 { animation-delay: 0.4s; }
+
+@keyframes spin {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-400px); }
+    100% { transform: translateY(0); }
+}
+
+.glow {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.pulse-gold {
+    animation: pulseGold 2s infinite;
+}
+
+@keyframes pulseGold {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+    50% { box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); }
+}
+
+.slot-symbol {
+    transition: all 0.3s ease;
+}
+
+.winning-symbol {
+    animation: symbolGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes symbolGlow {
+    from { text-shadow: 0 0 10px currentColor; }
+    to { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+.coin-animation {
+    animation: coinDrop 0.8s ease-out forwards;
+}
+
+@keyframes coinDrop {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(0) rotate(360deg); opacity: 1; }
+}
+
+.bg-gradient-casino {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.lever {
+    transition: transform 0.2s ease;
+}
+
+.lever:active {
+    transform: translateY(20px);
+}
