@@ -7,6 +7,7 @@ class SlotMachine {
         this.bet = 10;
         this.isSpinning = false;
         this.totalSpins = 0; // Track total spins for first 3 spin bonus
+        this.consecutiveLosses = 0; // Track consecutive losses for special mechanic
         
         this.initializeElements();
         this.bindEvents();
@@ -260,6 +261,7 @@ class SlotMachine {
             const payout = this.gameData.getPayout(symbol1) * this.bet;
             this.credits += payout;
             this.showWin(payout, symbol1, 'JACKPOT');
+            this.consecutiveLosses = 0; // Reset loss streak on win
             return payout;
         } 
         // Check for two matching symbols - ALWAYS gives bonus payout
@@ -268,6 +270,7 @@ class SlotMachine {
             const bonusPayout = Math.floor(this.bet * 1.5); // Always 150% of bet
             this.credits += bonusPayout;
             this.showWin(bonusPayout, matchingSymbol, 'TWO MATCH');
+            this.consecutiveLosses = 0; // Reset loss streak on win
             return bonusPayout;
         }
         // Random bonus for first 3 spins (only if no matches)
@@ -275,6 +278,7 @@ class SlotMachine {
             const bonusPayout = this.bet * 2;
             this.credits += bonusPayout;
             this.showWin(bonusPayout, '🍀', 'BONUS');
+            this.consecutiveLosses = 0; // Reset loss streak on win
             return bonusPayout;
         }
         // No matching symbols - return 50% of bet
@@ -282,12 +286,64 @@ class SlotMachine {
             const consolationPayout = Math.floor(this.bet * 0.5); // 50% of bet back
             this.credits += consolationPayout;
             this.showWin(consolationPayout, '💰', 'CONSOLATION');
+            
+            // Track consecutive losses (consolation counts as a loss)
+            this.consecutiveLosses++;
+            this.checkLossStreak();
+            
             return consolationPayout;
         }
     }
     
     showWin(amount, symbol, winType = 'WIN') {
         DisplayManager.showWin(amount, symbol, winType);
+    }
+    
+    checkLossStreak() {
+        if (this.consecutiveLosses === 4) {
+            this.showLossStreak();
+            this.consecutiveLosses = 0; // Reset after showing the message
+        }
+    }
+    
+    showLossStreak() {
+        // Create loss streak modal with sound and GIF
+        const lossModal = document.createElement('div');
+        lossModal.className = 'fixed inset-0 bg-white bg-opacity-95 flex items-center justify-center z-50 p-4';
+        lossModal.innerHTML = `
+            <div class="bg-black rounded-lg p-4 sm:p-8 border-4 border-red-500 max-w-md w-full text-center">
+                <h3 class="text-2xl sm:text-3xl font-bold text-red-400 mb-4">OUCH! 💀</h3>
+                <img src="assets/444.gif" alt="Loss Streak!" class="mx-auto mb-4 max-w-full h-auto rounded-lg" 
+                     onerror="this.style.display='none'; document.getElementById('lossGifText').style.display='block';">
+                <div id="lossGifText" class="text-6xl mb-4" style="display:none;">💀💀💀💀</div>
+                <div class="text-white mb-4">
+                    <p class="text-lg font-bold text-red-400 mb-2">Did you just lose 4 times in a row?</p>
+                    <p class="text-base">Your life must be suck</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" 
+                        class="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold py-3 px-6 rounded-lg w-full min-h-[44px] touch-manipulation">
+                    😢 OKAY, I GET IT
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(lossModal);
+        
+        // Play flashbang sound effect
+        try {
+            const flashbangAudio = new Audio('assets/Flashbang.mp3');
+            flashbangAudio.volume = 0.7; // Slightly lower volume
+            flashbangAudio.play();
+        } catch (e) {
+            console.log('Flashbang sound not available');
+        }
+        
+        // Auto-close after 8 seconds
+        setTimeout(() => {
+            if (document.body.contains(lossModal)) {
+                document.body.removeChild(lossModal);
+            }
+        }, 8000);
     }
     
     checkGameOver() {
