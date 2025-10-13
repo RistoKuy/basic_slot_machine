@@ -122,12 +122,8 @@ class SlotMachine {
         // Start spinning animation
         this.startSpinAnimation();
         
-        // Generate results
-        const results = [
-            this.gameData.getRandomSymbol(),
-            this.gameData.getRandomSymbol(),
-            this.gameData.getRandomSymbol()
-        ];
+        // Generate results with probability-based 2 matches
+        const results = this.generateResults();
         
         // Stop reels one by one with delay
         await this.stopReel(this.reel1, results[0], 1500);
@@ -215,6 +211,41 @@ class SlotMachine {
         });
     }
     
+    generateResults() {
+        const isFirstThreeSpins = this.totalSpins <= 3;
+        const twoMatchChance = isFirstThreeSpins ? 0.50 : 0.25; // 50% vs 25%
+        
+        // Check if we should force a 2-match result
+        if (Math.random() < twoMatchChance) {
+            // Generate a 2-match result
+            const matchingSymbol = this.gameData.getRandomSymbol();
+            const thirdSymbol = this.gameData.getRandomSymbol();
+            
+            // Ensure the third symbol is different to avoid 3 matches
+            let differentSymbol = thirdSymbol;
+            while (differentSymbol === matchingSymbol) {
+                differentSymbol = this.gameData.getRandomSymbol();
+            }
+            
+            // Randomly place the matching symbols
+            const positions = [0, 1, 2];
+            const matchPositions = positions.sort(() => Math.random() - 0.5).slice(0, 2);
+            
+            const results = [differentSymbol, differentSymbol, differentSymbol];
+            results[matchPositions[0]] = matchingSymbol;
+            results[matchPositions[1]] = matchingSymbol;
+            
+            return results;
+        }
+        
+        // Generate normal random results
+        return [
+            this.gameData.getRandomSymbol(),
+            this.gameData.getRandomSymbol(),
+            this.gameData.getRandomSymbol()
+        ];
+    }
+    
     checkWin(results) {
         const [symbol1, symbol2, symbol3] = results;
         
@@ -222,7 +253,7 @@ class SlotMachine {
         const isFirstThreeSpins = this.totalSpins <= 3;
         
         // Set probability chances based on spin count (only for jackpots now)
-        const jackpotChance = isFirstThreeSpins ? 0.10 : 0.001; // 10% vs 0.1%
+        const jackpotChance = isFirstThreeSpins ? 0.10 : 0.01; // 10% vs 1%
         
         // Check for three of a kind (jackpot) with probability
         if (symbol1 === symbol2 && symbol2 === symbol3 && Math.random() < jackpotChance) {
@@ -231,7 +262,7 @@ class SlotMachine {
             this.showWin(payout, symbol1, 'JACKPOT');
             return payout;
         } 
-        // Check for two matching symbols - guaranteed 150% of bet
+        // Check for two matching symbols - ALWAYS gives bonus payout
         else if (symbol1 === symbol2 || symbol2 === symbol3 || symbol1 === symbol3) {
             const matchingSymbol = symbol1 === symbol2 ? symbol1 : (symbol2 === symbol3 ? symbol2 : symbol1);
             const bonusPayout = Math.floor(this.bet * 1.5); // Always 150% of bet
