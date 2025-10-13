@@ -121,6 +121,15 @@ body {
     50% { box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); }
 }
 
+.pulse-blue {
+    animation: pulseBlue 1.5s infinite;
+}
+
+@keyframes pulseBlue {
+    0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+    50% { box-shadow: 0 0 25px rgba(59, 130, 246, 1), 0 0 40px rgba(59, 130, 246, 0.8); }
+}
+
 .slot-symbol {
     transition: all 0.3s ease;
 }
@@ -142,6 +151,25 @@ body {
     0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
     50% { opacity: 1; }
     100% { transform: translateY(0) rotate(360deg); opacity: 1; }
+}
+
+.bonus-animation {
+    animation: starFloat 0.6s ease-out forwards;
+}
+
+@keyframes starFloat {
+    0% { 
+        transform: translateY(-80px) scale(0.5); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: translateY(-20px) scale(1.2); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: translateY(0) scale(1); 
+        opacity: 1; 
+    }
 }
 
 .bg-gradient-casino {

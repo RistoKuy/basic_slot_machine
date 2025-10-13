@@ -15,10 +15,12 @@ class SlotMachine {
         this.credits = 100;
         this.bet = 10;
         this.isSpinning = false;
+        this.totalSpins = 0; // Track total spins for first 3 spin bonus
         
         this.initializeElements();
         this.bindEvents();
         this.updateDisplay();
+        this.loadSpinCount();
     }
     
     initializeElements() {
@@ -55,7 +57,7 @@ class SlotMachine {
         // Update button states
         this.spinButton.disabled = this.isSpinning || this.credits < this.bet;
         this.decreaseBetBtn.disabled = this.bet <= 5;
-        this.increaseBetBtn.disabled = this.bet >= this.credits || this.bet >= 50;
+        this.increaseBetBtn.disabled = this.bet >= this.credits;
         
         // Update button appearance based on state
         if (this.spinButton.disabled) {
@@ -63,11 +65,25 @@ class SlotMachine {
         } else {
             this.spinButton.classList.remove('opacity-50', 'cursor-not-allowed');
         }
+        
+        // Keep button text consistent - no bonus indicator
+        this.spinButton.textContent = '🎰 SPIN 🎰';
+    }
+    
+    loadSpinCount() {
+        const saved = localStorage.getItem('slotMachineSpinCount');
+        if (saved) {
+            this.totalSpins = parseInt(saved);
+        }
+    }
+    
+    saveSpinCount() {
+        localStorage.setItem('slotMachineSpinCount', this.totalSpins.toString());
     }
     
     changeBet(amount) {
         const newBet = this.bet + amount;
-        if (newBet >= 5 && newBet <= 50 && newBet <= this.credits) {
+        if (newBet >= 5 && newBet <= this.credits) {
             this.bet = newBet;
             this.updateDisplay();
         }
@@ -82,6 +98,8 @@ class SlotMachine {
         
         this.isSpinning = true;
         this.credits -= this.bet;
+        this.totalSpins++;
+        this.saveSpinCount();
         this.winDisplay.textContent = '';
         this.updateDisplay();
         
@@ -219,21 +237,57 @@ class SlotMachine {
     checkWin(results) {
         const [symbol1, symbol2, symbol3] = results;
         
-        // Check for three of a kind
-        if (symbol1 === symbol2 && symbol2 === symbol3) {
+        // Determine if this is a first 3 spins bonus
+        const isFirstThreeSpins = this.totalSpins <= 3;
+        
+        // Set probability chances based on spin count
+        const jackpotChance = isFirstThreeSpins ? 0.10 : 0.001; // 10% vs 0.1%
+        const bonusChance = isFirstThreeSpins ? 0.50 : 0.01;    // 50% vs 1%
+        
+        // Check for three of a kind (jackpot) with probability
+        if (symbol1 === symbol2 && symbol2 === symbol3 && Math.random() < jackpotChance) {
             const winAmount = this.payouts[symbol1] * this.bet;
             this.credits += winAmount;
-            this.showWin(winAmount, symbol1);
+            const winType = isFirstThreeSpins ? 'BONUS JACKPOT' : 'JACKPOT';
+            this.showWin(winAmount, symbol1, winType);
             this.celebrateWin();
-        } else {
+        } 
+        // Check for two matching symbols with probability for bonus (150% return = bet + 50%)
+        else if ((symbol1 === symbol2 || symbol2 === symbol3 || symbol1 === symbol3) && Math.random() < bonusChance) {
+            const matchingSymbol = symbol1 === symbol2 ? symbol1 : (symbol2 === symbol3 ? symbol2 : symbol1);
+            const winAmount = Math.floor(this.bet * 1.5); // 150% of bet (bet + 50% bonus)
+            this.credits += winAmount;
+            const winType = isFirstThreeSpins ? 'BONUS MATCH' : 'BONUS';
+            this.showWin(winAmount, matchingSymbol, winType);
+            this.celebrateBonusWin();
+        } 
+        // Check for three of a kind without probability (guaranteed jackpot)
+        else if (symbol1 === symbol2 && symbol2 === symbol3) {
+            const winAmount = this.payouts[symbol1] * this.bet;
+            this.credits += winAmount;
+            this.showWin(winAmount, symbol1, 'JACKPOT');
+            this.celebrateWin();
+        }
+        else {
             this.winDisplay.textContent = 'Try Again!';
-            this.winDisplay.className = 'text-center text-2xl font-bold text-red-400 h-8 mb-4';
+            this.winDisplay.className = 'text-center text-lg sm:text-2xl font-bold text-red-400 h-6 sm:h-8 mb-3 sm:mb-4';
         }
     }
     
-    showWin(amount, symbol) {
-        this.winDisplay.textContent = `🎉 WIN! ${amount} CREDITS! 🎉`;
-        this.winDisplay.className = 'text-center text-2xl font-bold text-green-400 h-8 mb-4 animate-pulse';
+    showWin(amount, symbol, winType = 'WIN') {
+        if (winType === 'BONUS' || winType === 'BONUS MATCH') {
+            const displayText = winType === 'BONUS MATCH' ? 
+                `🌟 BONUS MATCH! +${amount} CREDITS! 🌟` : 
+                `✨ BONUS! +${amount} CREDITS! ✨`;
+            this.winDisplay.textContent = displayText;
+            this.winDisplay.className = 'text-center text-lg sm:text-2xl font-bold text-blue-400 h-6 sm:h-8 mb-3 sm:mb-4 animate-pulse';
+        } else if (winType === 'BONUS JACKPOT') {
+            this.winDisplay.textContent = `💥 BONUS JACKPOT! +${amount} CREDITS! 💥`;
+            this.winDisplay.className = 'text-center text-lg sm:text-2xl font-bold text-purple-400 h-6 sm:h-8 mb-3 sm:mb-4 animate-bounce';
+        } else {
+            this.winDisplay.textContent = `🎉 WIN! ${amount} CREDITS! 🎉`;
+            this.winDisplay.className = 'text-center text-lg sm:text-2xl font-bold text-green-400 h-6 sm:h-8 mb-3 sm:mb-4 animate-pulse';
+        }
         
         // Add winning glow to symbols
         const symbols = document.querySelectorAll('.slot-symbol');
@@ -260,6 +314,19 @@ class SlotMachine {
         }, 3000);
     }
     
+    celebrateBonusWin() {
+        // Add blue glow effect for bonus wins
+        const slotMachine = document.querySelector('.slot-machine');
+        slotMachine.classList.add('pulse-blue');
+        
+        // Create smaller bonus animation
+        this.createBonusAnimation();
+        
+        setTimeout(() => {
+            slotMachine.classList.remove('pulse-blue');
+        }, 2000);
+    }
+    
     createCoinAnimation() {
         const container = document.querySelector('.slot-machine');
         
@@ -279,6 +346,28 @@ class SlotMachine {
                     coin.remove();
                 }, 800);
             }, i * 100);
+        }
+    }
+    
+    createBonusAnimation() {
+        const container = document.querySelector('.slot-machine');
+        
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const star = document.createElement('div');
+                star.textContent = '⭐';
+                star.className = 'bonus-animation absolute text-3xl pointer-events-none';
+                star.style.left = Math.random() * 80 + 10 + '%';
+                star.style.top = '30%';
+                star.style.zIndex = '1000';
+                
+                container.style.position = 'relative';
+                container.appendChild(star);
+                
+                setTimeout(() => {
+                    star.remove();
+                }, 600);
+            }, i * 120);
         }
     }
     
