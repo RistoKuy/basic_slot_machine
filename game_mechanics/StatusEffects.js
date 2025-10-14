@@ -19,7 +19,7 @@ class StatusEffects {
 
     updateStatusEffects() {
         // Check for Pity Status activation
-        if (!this.pityStatus && this.game.consecutiveLosses >= 4 && this.game.credits < 50) {
+        if (!this.pityStatus && this.game.credits < 50) {
             this.pityStatus = true;
             this.showStatusActivation('pity');
         }

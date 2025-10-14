@@ -255,7 +255,7 @@ function showInstructions() {
                 <div>• Try the <strong>Konami Code</strong> for bonus credits! ↑↑↓↓←→←→BA</div>
                 <div class="border-t border-yellow-600 pt-3 mt-3">
                     <div class="text-center text-yellow-400 font-bold">STATUS EFFECTS!</div>
-                    <div class="text-center text-xs">💙 <strong>Pity Status</strong>: Activated when you're down and out</div>
+                    <div class="text-center text-xs">💙 <strong>Pity Status</strong>: Activated when credits &lt; 50</div>
                     <div class="text-center text-xs">👑 <strong>Privilege Status</strong>: Activated when you're on fire</div>
                 </div>
                 <div class="border-t border-yellow-600 pt-3 mt-3">
