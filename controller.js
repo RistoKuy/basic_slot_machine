@@ -51,19 +51,12 @@ async function initializeGame() {
         // Manually trigger game initialization
         // Since DOM is already loaded, we need to call the initialization code directly
         const slotMachine = new SlotMachine();
-        const progressiveJackpot = new ProgressiveJackpot(slotMachine);
         const gameStats = new GameStats();
 
-        // Override the checkWin method to include jackpot and stats
+        // Override the checkWin method to include stats tracking
         const originalCheckWin = slotMachine.gameLogic.checkWin.bind(slotMachine.gameLogic);
         slotMachine.gameLogic.checkWin = function(results) {
-            // Check progressive jackpot first
-            if (progressiveJackpot.checkJackpot(results)) {
-                gameStats.recordSpin(slotMachine.bet, progressiveJackpot.jackpot);
-                return progressiveJackpot.jackpot;
-            }
-
-            // Check regular wins
+            // Check regular wins and record stats
             const winAmount = originalCheckWin(results);
             gameStats.recordSpin(slotMachine.bet, winAmount);
 
@@ -76,6 +69,14 @@ async function initializeGame() {
                 showStatsModal(gameStats);
             }
         });
+
+        // Add help button click handler
+        const helpButton = document.getElementById('helpButton');
+        if (helpButton) {
+            helpButton.addEventListener('click', () => {
+                showInstructions();
+            });
+        }
 
         // Show instructions on first load
         if (!localStorage.getItem('slotMachineInstructions')) {

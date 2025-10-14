@@ -6,6 +6,7 @@ class StatusEffects {
         this.pityStatus = false;
         this.privilegeStatus = false;
         this.hasSpunOnce = false; // Track if player has spun at least once
+        this.privilegeTaxRate = 0.10; // Start at 10%, increases with jackpots
         this.createStatusDisplay();
     }
 
@@ -42,12 +43,14 @@ class StatusEffects {
         // Check for Privilege Status activation
         if (!this.privilegeStatus && this.game.consecutiveWins >= 3 && this.game.credits > 1000) {
             this.privilegeStatus = true;
+            this.privilegeTaxRate = 0.10; // Reset tax rate when privilege activates
             this.showStatusActivation('privilege');
         }
 
         // Check for Privilege Status deactivation
         if (this.privilegeStatus && this.game.consecutiveLosses >= 3) {
             this.privilegeStatus = false;
+            this.privilegeTaxRate = 0.10; // Reset tax rate when privilege deactivates
             this.game.consecutiveWins = 0; // Reset win streak
             this.showStatusDeactivation('privilege');
         }
@@ -71,11 +74,14 @@ class StatusEffects {
 
         if (this.privilegeStatus) {
             const privilegeBonus = Math.floor(this.game.bet / 50);
+            const jackpotBonus = Math.min(privilegeBonus, 30); // Cap at 30%
+            const twoMatchBonus = Math.min(privilegeBonus * 5, 60); // Cap at 60%
+            const taxPercentage = Math.floor(this.privilegeTaxRate * 100);
             statusContainer.innerHTML = `
                 <div class="privilege-status relative bg-purple-900 border border-purple-400 rounded-lg p-2 animate-pulse">
                     <div class="text-purple-300 font-bold text-sm">👑 PRIVILEGE STATUS ACTIVE 👑</div>
-                    <div class="text-purple-200 text-xs">Jackpot: +${privilegeBonus}% | 2-Match: +${privilegeBonus * 5}%</div>
-                    <div class="text-red-300 text-xs">Warning: -10% credits on wins</div>
+                    <div class="text-purple-200 text-xs">Jackpot: +${jackpotBonus}% (Max 30%) | 2-Match: +${twoMatchBonus}% (Max 60%)</div>
+                    <div class="text-red-300 text-xs font-bold">Tax: -${taxPercentage}% on wins | No consolation prize</div>
                 </div>
             `;
         }
@@ -111,7 +117,8 @@ class StatusEffects {
 
         if (this.privilegeStatus) {
             const privilegeBonus = Math.floor(this.game.bet / 50) * 0.05; // +5% per 50 credits bet
-            baseChance += privilegeBonus;
+            const cappedBonus = Math.min(privilegeBonus, 0.60); // Cap at 60%
+            baseChance += cappedBonus;
         }
 
         return Math.min(baseChance, 0.85); // Cap at 85%
@@ -119,7 +126,7 @@ class StatusEffects {
 
     applyPrivilegePenalty() {
         if (this.privilegeStatus) {
-            const penalty = Math.floor(this.game.credits * 0.1);
+            const penalty = Math.floor(this.game.credits * this.privilegeTaxRate);
             this.game.credits -= penalty;
             
             // Show penalty notification
@@ -128,7 +135,7 @@ class StatusEffects {
                 penaltyDisplay.className = 'fixed top-4 right-4 bg-red-900 border-2 border-red-400 rounded-lg p-3 z-50 animate-bounce';
                 penaltyDisplay.innerHTML = `
                     <div class="text-red-300 font-bold text-sm">👑 PRIVILEGE TAX</div>
-                    <div class="text-red-200 text-xs">-${penalty} credits (10%)</div>
+                    <div class="text-red-200 text-xs">-${penalty} credits (${Math.floor(this.privilegeTaxRate * 100)}%)</div>
                 `;
                 document.body.appendChild(penaltyDisplay);
 
@@ -139,6 +146,18 @@ class StatusEffects {
                 }, 3000);
             }, 1000);
         }
+    }
+
+    onJackpotWin() {
+        // Increase tax rate by 10% on each jackpot win, up to 99%
+        if (this.privilegeStatus) {
+            this.privilegeTaxRate = Math.min(this.privilegeTaxRate + 0.10, 0.99);
+        }
+    }
+
+    shouldGiveConsolation() {
+        // No consolation prize during Privilege Status
+        return !this.privilegeStatus;
     }
 
     showStatusActivation(statusType) {

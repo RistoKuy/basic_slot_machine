@@ -25,7 +25,8 @@ class GameData {
     }
 }
 
-// Progressive Jackpot Feature
+/* 
+// Progressive Jackpot Feature - DISABLED (focusing on paytable multipliers)
 class ProgressiveJackpot {
     constructor(slotMachine) {
         this.slotMachine = slotMachine;
@@ -63,7 +64,7 @@ class ProgressiveJackpot {
         return false;
     }
 }
-
+*/
 // Statistics Tracker
 class GameStats {
     constructor() {
@@ -245,22 +246,53 @@ function showInstructions() {
     modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
     modal.innerHTML = `
         <div class="bg-gray-900 rounded-lg p-4 sm:p-8 border-4 border-yellow-500 max-w-lg w-full max-h-full overflow-y-auto">
-            <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 text-center">🎰 HOW TO PLAY 🎰</h3>
+            <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 text-center">🎰 GAME GUIDELINES 🎰</h3>
             <div class="text-yellow-300 space-y-3 text-xs sm:text-sm">
-                <div>• Tap <strong>SPIN</strong> or press <strong>SPACEBAR</strong> to play</div>
-                <div>• Use <strong>BET +/-</strong> buttons to adjust your bet (5-50)</div>
-                <div>• Match 3 symbols to win credits!</div>
-                <div>• <strong>Double-tap SPIN</strong> for auto-play (10 spins)</div>
-                <div>• Press <strong>'S'</strong> to view statistics</div>
-                <div>• Try the <strong>Konami Code</strong> for bonus credits! ↑↑↓↓←→←→BA</div>
-                <div class="border-t border-yellow-600 pt-3 mt-3">
-                    <div class="text-center text-yellow-400 font-bold">STATUS EFFECTS!</div>
-                    <div class="text-center text-xs">💙 <strong>Pity Status</strong>: Activated when credits &lt; 50</div>
-                    <div class="text-center text-xs">👑 <strong>Privilege Status</strong>: Activated when you're on fire</div>
+                <div class="border-b border-yellow-600 pb-2">
+                    <div class="font-bold text-yellow-400">📜 BASIC RULES</div>
+                    <div>• Tap <strong>SPIN</strong> or press <strong>SPACEBAR</strong> to play</div>
+                    <div>• Use <strong>BET +/-</strong> buttons to adjust your bet</div>
+                    <div>• Match 3 symbols to win BIG based on paytable!</div>
+                    <div>• Match 2 symbols to get 150% of your bet back</div>
+                    <div>• No matches? Get 50% consolation prize (unless in Privilege Status)</div>
                 </div>
-                <div class="border-t border-yellow-600 pt-3 mt-3">
-                    <div class="text-center text-yellow-400 font-bold">JACKPOT CHANCE!</div>
-                    <div class="text-center">Get 🎰🎰🎰 for a chance at the progressive jackpot!</div>
+                
+                <div class="border-b border-yellow-600 pb-2">
+                    <div class="font-bold text-yellow-400">🎮 CONTROLS</div>
+                    <div>• <strong>Spacebar</strong>: Spin</div>
+                    <div>• <strong>↑/↓ Arrows</strong>: Adjust bet ±5</div>
+                    <div>• <strong>Shift + ↑/↓</strong>: Adjust bet ×10 / ÷10</div>
+                    <div>• <strong>S key</strong>: View statistics</div>
+                    <div>• <strong>Double-click SPIN</strong>: Auto-play 10 spins</div>
+                    <div>• <strong>? button</strong>: Show this guide</div>
+                </div>
+                
+                <div class="border-b border-yellow-600 pb-2">
+                    <div class="font-bold text-yellow-400">💙 PITY STATUS (Helper)</div>
+                    <div class="text-blue-300">When credits &lt; 50:</div>
+                    <div>• +1% jackpot chance per 10 credits bet</div>
+                    <div>• +5% two-match chance per 10 credits bet</div>
+                    <div>• Max: 50% jackpot, 85% two-match</div>
+                    <div>• Deactivates when credits ≥ 50</div>
+                </div>
+                
+                <div class="border-b border-yellow-600 pb-2">
+                    <div class="font-bold text-yellow-400">👑 PRIVILEGE STATUS (Risk/Reward)</div>
+                    <div class="text-purple-300">Activates: 3 wins in a row + credits &gt; 1000</div>
+                    <div class="text-green-300">Bonuses:</div>
+                    <div>• +1% jackpot per 50 credits bet (Max 30%)</div>
+                    <div>• +5% two-match per 50 credits bet (Max 60%)</div>
+                    <div class="text-red-300">Penalties:</div>
+                    <div>• Tax on ALL wins (starts 10%, +10% per jackpot, max 99%)</div>
+                    <div>• NO consolation prize on losses</div>
+                    <div>• Deactivates after 3 losses in a row</div>
+                </div>
+                
+                <div>
+                    <div class="font-bold text-yellow-400">🎁 EXTRAS</div>
+                    <div>• First 3 spins: Enhanced win chances!</div>
+                    <div>• <strong>Konami Code</strong>: ↑↑↓↓←→←→BA for 1000 credits</div>
+                    <div>• Check the paytable below for jackpot values!</div>
                 </div>
             </div>
             <button id="closeInstructions" class="mt-6 bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-800 text-black font-bold py-3 px-6 rounded-lg w-full min-h-[44px] touch-manipulation">

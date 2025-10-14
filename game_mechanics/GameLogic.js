@@ -168,14 +168,11 @@ class GameLogic {
         // Determine if this is a first 3 spins bonus
         const isFirstThreeSpins = this.game.totalSpins <= 3;
 
-        // Get jackpot chance with status bonuses
-        const jackpotChance = this.game.statusEffects.getJackpotChance();
-
         let winAmount = 0;
         let isWin = false;
 
-        // Check for three of a kind (jackpot) with probability
-        if (symbol1 === symbol2 && symbol2 === symbol3 && Math.random() < jackpotChance) {
+        // Check for three of a kind (jackpot) - ALWAYS wins if 3 match!
+        if (symbol1 === symbol2 && symbol2 === symbol3) {
             const payout = this.game.gameData.getPayout(symbol1) * this.game.bet;
             this.game.credits += payout;
             winAmount = payout;
@@ -183,6 +180,9 @@ class GameLogic {
             this.game.showWin(payout, symbol1, 'JACKPOT');
             this.game.consecutiveLosses = 0; // Reset loss streak on win
             this.game.consecutiveWins++; // Track consecutive wins
+            
+            // Increase privilege tax on jackpot wins
+            this.game.statusEffects.onJackpotWin();
         } 
         // Check for two matching symbols - ALWAYS gives bonus payout
         else if (symbol1 === symbol2 || symbol2 === symbol3 || symbol1 === symbol3) {
@@ -205,18 +205,24 @@ class GameLogic {
             this.game.consecutiveLosses = 0; // Reset loss streak on win
             this.game.consecutiveWins++; // Track consecutive wins
         }
-        // No matching symbols - return 50% of bet
+        // No matching symbols - return 50% of bet (consolation prize)
         else {
-            const consolationPayout = Math.floor(this.game.bet * 0.5); // 50% of bet back
-            this.game.credits += consolationPayout;
-            this.game.showWin(consolationPayout, '💰', 'CONSOLATION');
+            // Check if player should get consolation (not during Privilege Status)
+            if (this.game.statusEffects.shouldGiveConsolation()) {
+                const consolationPayout = Math.floor(this.game.bet * 0.5); // 50% of bet back
+                this.game.credits += consolationPayout;
+                this.game.showWin(consolationPayout, '💰', 'CONSOLATION');
+                winAmount = consolationPayout;
+            } else {
+                // No consolation during Privilege Status - total loss
+                this.game.showWin(0, '❌', 'NO WIN');
+                winAmount = 0;
+            }
 
             // Track consecutive losses (consolation counts as a loss)
             this.game.consecutiveLosses++;
             this.game.consecutiveWins = 0; // Reset win streak on loss
             this.checkLossStreak();
-
-            winAmount = consolationPayout;
         }
 
         // Apply privilege status penalty (10% deduction on wins)
