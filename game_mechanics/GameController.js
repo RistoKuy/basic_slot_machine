@@ -106,38 +106,3 @@ class SlotMachine {
         DisplayManager.showWin(amount, symbol, winType);
     }
 }
-
-// Game Initialization and Event Handlers
-document.addEventListener('DOMContentLoaded', () => {
-    const slotMachine = new SlotMachine();
-    const progressiveJackpot = new ProgressiveJackpot(slotMachine);
-    const gameStats = new GameStats();
-
-    // Override the checkWin method to include jackpot and stats
-    const originalCheckWin = slotMachine.gameLogic.checkWin.bind(slotMachine.gameLogic);
-    slotMachine.gameLogic.checkWin = function(results) {
-        // Check progressive jackpot first
-        if (progressiveJackpot.checkJackpot(results)) {
-            gameStats.recordSpin(slotMachine.bet, progressiveJackpot.jackpot);
-            return progressiveJackpot.jackpot;
-        }
-
-        // Check regular wins
-        const winAmount = originalCheckWin(results);
-        gameStats.recordSpin(slotMachine.bet, winAmount);
-
-        return winAmount;
-    };
-
-    // Add stats display toggle (press 'S' key)
-    document.addEventListener('keydown', (e) => {
-        if (e.key.toLowerCase() === 's' && !slotMachine.isSpinning) {
-            showStatsModal(gameStats);
-        }
-    });
-
-    // Show instructions on first load
-    if (!localStorage.getItem('slotMachineInstructions')) {
-        setTimeout(() => showInstructions(), 1000);
-    }
-});
