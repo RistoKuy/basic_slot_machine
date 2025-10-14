@@ -13,7 +13,14 @@ A web-based slot machine game built with vanilla JavaScript.
 ## Controls
 
 - Click **SPIN** or press **Spacebar** to play
-- Use **BET +/-** buttons to adjust bet amount
+- Use **BET +/-** buttons to adjust bet amount by 5
+- Use **BET +10x/-10x** buttons for smart betting:
+  - **+10x**: Multiplies bet by 10, or maxes out to your total credits if insufficient
+  - **-10x**: Divides bet by 10, or drops to minimum bet (5) if result would be too low
+- **Keyboard shortcuts**:
+  - **Spacebar**: Spin
+  - **↑/↓ Arrow keys**: Adjust bet by 5
+  - **Shift + ↑/↓ Arrow keys**: Smart 10x betting (max out when insufficient credits)
 - Double-click **SPIN** for auto-play (10 spins)
 - Press **S** to view statistics
 - Konami Code (↑↑↓↓←→←→BA) for bonus credits

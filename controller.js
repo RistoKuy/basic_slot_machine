@@ -25,6 +25,8 @@ class SlotMachine {
         this.winDisplay = document.getElementById('winDisplay');
         this.decreaseBetBtn = document.getElementById('decreaseBet');
         this.increaseBetBtn = document.getElementById('increaseBet');
+        this.decreaseBet10xBtn = document.getElementById('decreaseBet10x');
+        this.increaseBet10xBtn = document.getElementById('increaseBet10x');
         this.spinSound = document.getElementById('spinSound');
     }
     
@@ -32,12 +34,28 @@ class SlotMachine {
         this.spinButton.addEventListener('click', () => this.spin());
         this.decreaseBetBtn.addEventListener('click', () => this.changeBet(-5));
         this.increaseBetBtn.addEventListener('click', () => this.changeBet(5));
+        this.decreaseBet10xBtn.addEventListener('click', () => this.changeBet10x(-1));
+        this.increaseBet10xBtn.addEventListener('click', () => this.changeBet10x(1));
         
         // Keyboard controls
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && !this.isSpinning) {
                 e.preventDefault();
                 this.spin();
+            } else if (e.code === 'ArrowDown' && !this.isSpinning) {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    this.changeBet10x(-1); // Shift + Down: 10x decrease
+                } else {
+                    this.changeBet(-5); // Down: normal decrease
+                }
+            } else if (e.code === 'ArrowUp' && !this.isSpinning) {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    this.changeBet10x(1); // Shift + Up: 10x increase
+                } else {
+                    this.changeBet(5); // Up: normal increase
+                }
             }
         });
     }
@@ -49,8 +67,13 @@ class SlotMachine {
         // Update button states
         this.spinButton.disabled = this.isSpinning || this.credits < this.bet;
         this.decreaseBetBtn.disabled = this.bet <= 5;
-        // Fix: Allow increasing bet only if it won't exceed credits AND credits are sufficient
         this.increaseBetBtn.disabled = this.bet >= this.credits || this.credits < this.bet + 5;
+        
+        // Update 10x button states
+        // Decrease 10x disabled only when already at minimum bet (5)
+        this.decreaseBet10xBtn.disabled = this.bet <= 5;
+        // Increase 10x disabled only when already at maximum possible bet (equals credits)
+        this.increaseBet10xBtn.disabled = this.bet >= this.credits;
         
         // Update button appearance based on state
         if (this.spinButton.disabled) {
@@ -87,6 +110,31 @@ class SlotMachine {
         } else {
             // Increasing bet - check both maximum limit and available credits
             if (newBet <= this.credits && newBet >= 5) {
+                this.bet = newBet;
+                this.updateDisplay();
+            }
+        }
+    }
+    
+    changeBet10x(multiplier) {
+        let newBet;
+        
+        if (multiplier < 0) {
+            // Decreasing bet: try to divide by 10, if not possible, go to minimum (5)
+            newBet = Math.floor(this.bet / 10);
+            if (newBet < 5) {
+                newBet = 5; // Max out to minimum possible bet
+            }
+            this.bet = newBet;
+            this.updateDisplay();
+        } else {
+            // Increasing bet: try to multiply by 10, if not possible due to credits, max out to available credits
+            newBet = this.bet * 10;
+            if (newBet > this.credits) {
+                newBet = this.credits; // Max out to available credits
+            }
+            // Ensure minimum bet is still respected
+            if (newBet >= 5) {
                 this.bet = newBet;
                 this.updateDisplay();
             }
@@ -360,6 +408,8 @@ class SlotMachine {
         this.spinButton.disabled = true;
         this.decreaseBetBtn.disabled = true;
         this.increaseBetBtn.disabled = true;
+        this.decreaseBet10xBtn.disabled = true;
+        this.increaseBet10xBtn.disabled = true;
         
         // Create game over modal
         const gameOverModal = document.createElement('div');
