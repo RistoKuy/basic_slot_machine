@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Loading Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .log {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #00ff00;
+            padding-left: 10px;
+        }
+        .error {
+            color: #ff0000;
+            border-left-color: #ff0000;
+        }
+        .success {
+            color: #00ff00;
+            border-left-color: #00ff00;
+        }
+        .info {
+            color: #ffff00;
+            border-left-color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎰 Slot Machine - Loading Test</h1>
+    <div id="logs"></div>
+    
+    <script>
+        // Intercept console.log to display on page
+        const logsDiv = document.getElementById('logs');
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log success';
+            logEntry.textContent = '✓ ' + args.join(' ');
+            logsDiv.appendChild(logEntry);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log error';
+            logEntry.textContent = '✗ ' + args.join(' ');
+            logsDiv.appendChild(logEntry);
+        };
+        
+        // Load the game
+        const script1 = document.createElement('script');
+        script1.src = 'models.js';
+        script1.onload = () => {
+            console.log('Models loaded');
+            
+            const script2 = document.createElement('script');
+            script2.src = 'controller.js';
+            script2.onload = () => {
+                console.log('Controller loaded');
+            };
+            script2.onerror = () => {
+                console.error('Failed to load controller.js');
+            };
+            document.body.appendChild(script2);
+        };
+        script1.onerror = () => {
+            console.error('Failed to load models.js');
+        };
+        document.body.appendChild(script1);
+        
+        // Check if game initialized after 3 seconds
+        setTimeout(() => {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log info';
+            if (typeof SlotMachine !== 'undefined') {
+                logEntry.textContent = '✓ SlotMachine class is available!';
+                logEntry.className = 'log success';
+            } else {
+                logEntry.textContent = '✗ SlotMachine class not found!';
+                logEntry.className = 'log error';
+            }
+            logsDiv.appendChild(logEntry);
+        }, 3000);
+    </script>
+</body>
+</html>
