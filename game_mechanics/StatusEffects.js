@@ -5,6 +5,7 @@ class StatusEffects {
         this.game = gameController;
         this.pityStatus = false;
         this.privilegeStatus = false;
+        this.hasSpunOnce = false; // Track if player has spun at least once
         this.createStatusDisplay();
     }
 
@@ -18,6 +19,14 @@ class StatusEffects {
     }
 
     updateStatusEffects() {
+        // Mark that player has spun (called after each spin)
+        this.hasSpunOnce = true;
+        
+        // Only check status effects AFTER player has spun at least once
+        if (!this.hasSpunOnce) {
+            return;
+        }
+        
         // Check for Pity Status activation
         if (!this.pityStatus && this.game.credits < 50) {
             this.pityStatus = true;

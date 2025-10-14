@@ -86,8 +86,7 @@ class SlotMachine {
         // Keep button text consistent - no bonus indicator
         this.spinButton.textContent = '🎰 SPIN 🎰';
 
-        // Update status effects
-        this.statusEffects.updateStatusEffects();
+        // Only update status display (not check for activation/deactivation)
         this.statusEffects.updateStatusDisplay();
     }
 

@@ -47,6 +47,10 @@ class GameLogic {
         this.checkWin(results);
 
         this.game.isSpinning = false;
+        
+        // Check and update status effects AFTER spin is complete
+        this.game.statusEffects.updateStatusEffects();
+        
         this.game.updateDisplay();
 
         // Check if player can still continue playing after this spin
