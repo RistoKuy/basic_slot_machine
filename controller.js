@@ -78,10 +78,8 @@ async function initializeGame() {
             });
         }
 
-        // Show instructions on first load
-        if (!localStorage.getItem('slotMachineInstructions')) {
-            setTimeout(() => showInstructions(), 1000);
-        }
+        // Always show instructions on game start
+        setTimeout(() => showInstructions(), 1000);
         
         console.log('✓ Game initialized successfully!');
         

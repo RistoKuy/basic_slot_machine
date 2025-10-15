@@ -305,6 +305,5 @@ function showInstructions() {
     
     document.getElementById('closeInstructions').addEventListener('click', () => {
         document.body.removeChild(modal);
-        localStorage.setItem('slotMachineInstructions', 'shown');
     });
 }
