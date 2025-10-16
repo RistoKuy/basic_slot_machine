@@ -19,6 +19,7 @@ class SlotMachine {
         this.bettingSystem = new BettingSystem(this);
         this.gameLogic = new GameLogic(this);
         this.gameFeatures = new GameFeatures(this);
+        this.jumpscareSystem = new JumpscareSystem(this);
 
         // Setup the game
         this.bindEvents();

@@ -223,6 +223,9 @@ class GameLogic {
             this.game.consecutiveLosses++;
             this.game.consecutiveWins = 0; // Reset win streak on loss
             this.checkLossStreak();
+            
+            // Check for jumpscare on no match (20% chance)
+            this.game.jumpscareSystem.checkForJumpscare(results);
         }
 
         // Apply privilege status penalty (10% deduction on wins)
@@ -247,7 +250,7 @@ class GameLogic {
         lossModal.innerHTML = `
             <div class="bg-black rounded-lg p-4 sm:p-8 border-4 border-red-500 max-w-md w-full text-center">
                 <h3 class="text-2xl sm:text-3xl font-bold text-red-400 mb-4">OUCH! 💀</h3>
-                <img src="assets/444.gif" alt="Loss Streak!" class="mx-auto mb-4 max-w-full h-auto rounded-lg" 
+                <img src="assets/lose/444.gif" alt="Loss Streak!" class="mx-auto mb-4 max-w-full h-auto rounded-lg" 
                      onerror="this.style.display='none'; document.getElementById('lossGifText').style.display='block';">
                 <div id="lossGifText" class="text-6xl mb-4" style="display:none;">💀💀💀💀</div>
                 <div class="text-white mb-4">
@@ -265,7 +268,7 @@ class GameLogic {
 
         // Play flashbang sound effect
         try {
-            const flashbangAudio = new Audio('assets/Flashbang.mp3');
+            const flashbangAudio = new Audio('assets/lose/Flashbang.mp3');
             flashbangAudio.volume = 0.7; // Slightly lower volume
             flashbangAudio.play();
         } catch (e) {
@@ -303,7 +306,7 @@ class GameLogic {
         gameOverModal.innerHTML = `
             <div class="bg-gray-900 rounded-lg p-4 sm:p-8 border-4 border-red-500 max-w-md w-full text-center">
                 <h3 class="text-2xl sm:text-3xl font-bold text-red-400 mb-4">GAME OVER!</h3>
-                <img src="assets/lose.png" alt="You Lost!" class="mx-auto mb-4 max-w-full h-auto rounded-lg" 
+                <img src="assets/lose/lose.png" alt="You Lost!" class="mx-auto mb-4 max-w-full h-auto rounded-lg" 
                      onerror="this.style.display='none'; document.getElementById('loseText').style.display='block';">
                 <div id="loseText" class="text-6xl mb-4" style="display:none;">😵</div>
                 <div class="text-yellow-300 mb-4">

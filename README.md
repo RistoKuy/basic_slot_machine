@@ -62,6 +62,20 @@ You're rich, so the house wants its cut - and it gets greedier!
 - Consecutive loss counter resets after the message
 - Keeps players motivated during tough runs
 
+### 👻 Jumpscare System
+- **50% chance** of a jumpscare when you get no matches (all different symbols)
+- Randomly selects from multiple jumpscare videos in `assets/jumpscares/` folder
+  - Blue Lobster jumpscare
+  - Foxy (FNAF) jumpscare
+- Fullscreen video overlay that plays automatically at full volume
+- **1-second delay** after seeing your loss - gives you time to process the result first
+- **Close the jumpscare** by:
+  - Clicking/tapping anywhere on the screen
+  - Waiting for the video to end naturally
+  - Automatic safety close after 10 seconds
+- Prevents multiple jumpscares from overlapping
+- Adds an extra layer of excitement (or terror!) to your losing streaks!
+
 ### 🎊 Special Features
 - **Help Button**: Click the "?" button anytime to view comprehensive game guidelines
 - **Auto-Play**: Double-click the SPIN button to automatically play 10 spins
@@ -113,6 +127,7 @@ You're rich, so the house wants its cut - and it gets greedier!
 - **S**: View statistics dashboard
 - **? Button**: Show game guidelines (top-right corner)
 - **Konami Code**: Get bonus credits (↑↑↓↓←→←→BA)
+- **Click during jumpscare**: Close jumpscare immediately
 
 ### Advanced Features
 - **Help Access**: Click "?" button anytime for full game guidelines
@@ -132,6 +147,7 @@ You're rich, so the house wants its cut - and it gets greedier!
 7. **Track Statistics**: Press 'S' regularly to monitor your win rate and adjust strategy
 8. **First Spins Matter**: Take advantage of enhanced odds in your first 3 spins!
 9. **Tax Management**: Each jackpot increases your tax by 10% during Privilege - plan accordingly
+10. **Brace for Jumpscares**: 50% chance on complete losses - don't say we didn't warn you! 👻
 
 ## 📁 Project Structure
 
@@ -157,11 +173,17 @@ basic_slot_machine/
 │   ├── StatusEffects.js   # Pity and Privilege status system
 │   ├── BettingSystem.js   # Betting controls and logic
 │   ├── GameLogic.js       # Core mechanics (spinning, wins, results)
-│   └── GameFeatures.js    # Additional features (auto-spin, cheats)
+│   ├── GameFeatures.js    # Additional features (auto-spin, cheats)
+│   └── JumpscareSystem.js # Jumpscare on losses (50% chance)
 └── assets/                # Game assets
-    ├── 444.gif           # Loss streak animation
-    ├── lose.png          # Game over image
-    └── Flashbang.mp3     # Loss streak sound effect
+    ├── jumpscares/        # Jumpscare videos
+    │   ├── BlueLobster.mp4
+    │   ├── Foxy.mp4
+    │   └── JUMPSCARE_FEATURE.md
+    └── lose/              # Loss streak assets
+        ├── 444.gif        # Loss streak animation
+        ├── lose.png       # Game over image
+        └── Flashbang.mp3  # Loss streak sound effect
 ```
 
 ### Module Responsibilities
@@ -197,6 +219,14 @@ basic_slot_machine/
 - Keyboard betting shortcuts
 - Smart 10x betting logic
 
+**game_mechanics/JumpscareSystem.js**:
+- Random jumpscare trigger system (50% on losses)
+- Multiple jumpscare video management
+- Fullscreen overlay presentation
+- Click-to-close functionality
+- Safety timeout (10 seconds)
+- Prevents overlapping jumpscares
+
 **game_mechanics/GameLogic.js**:
 - Spin mechanics and animations
 - Result generation with probabilities
@@ -204,6 +234,7 @@ basic_slot_machine/
 - Conditional consolation prizes (disabled during Privilege)
 - Loss streak detection
 - Game over handling
+- Jumpscare trigger integration
 
 **game_mechanics/GameFeatures.js**:
 - Konami Code cheat
@@ -230,9 +261,12 @@ basic_slot_machine/
    ```
 
 2. **Add assets (optional)**
-   - Place `lose.png` in the `assets/` folder for game over screen
-   - Place `444.gif` in the `assets/` folder for loss streak animation
-   - Place `Flashbang.mp3` in the `assets/` folder for loss streak sound
+   - Place `lose.png` in the `assets/lose/` folder for game over screen
+   - Place `444.gif` in the `assets/lose/` folder for loss streak animation
+   - Place `Flashbang.mp3` in the `assets/lose/` folder for loss streak sound
+   - Add custom jumpscare videos (`.mp4`) to `assets/jumpscares/` folder
+     - The game includes `BlueLobster.mp4` and `Foxy.mp4` by default
+     - Add more videos and update the `jumpscareVideos` array in `JumpscareSystem.js`
 
 3. **Open and play**
    ```bash
@@ -267,8 +301,27 @@ Edit `game_mechanics/StatusEffects.js`:
 if (!this.pityStatus && this.game.credits < 50) // Change 50
 
 // Privilege Status threshold  
-if (!this.privilegeStatus && this.game.consecutiveWins >= 3 
-    && this.game.credits > 1000) // Change 3 and 1000
+if (!this.privilegeStatus && this.game.credits >= 1000) // Change 1000
+```
+
+### Adjust Jumpscare Settings
+Edit `game_mechanics/JumpscareSystem.js`:
+```javascript
+// Change probability
+this.jumpscareChance = 0.50; // 50% chance (change to 0.20 for 20%, 1.0 for testing)
+
+// Add more videos
+this.jumpscareVideos = [
+    'assets/jumpscares/BlueLobster.mp4',
+    'assets/jumpscares/Foxy.mp4',
+    'assets/jumpscares/YourVideo.mp4'  // Add here
+];
+
+// Adjust volume (in triggerJumpscare method)
+video.volume = 1.0; // 100% volume (change to 0.5 for 50%)
+
+// Change delay before jumpscare (in checkForJumpscare method)
+setTimeout(() => this.triggerJumpscare(), 300); // 0.3 seconds
 ```
 
 ### Change Starting Credits
@@ -316,17 +369,25 @@ Perfect for learning modern JavaScript game development!
 Feel free to fork, modify, and create pull requests! Some ideas for enhancements:
 - Additional symbol types
 - More status effects
-- Achievement system
-- Sound settings panel
+- Achievement system (e.g., "Survived 10 jumpscares")
+- Sound settings panel (mute option)
 - Difficulty modes
 - Daily challenges
 - Leaderboard system
 - Visual tax rate indicator
 - Privilege tax history tracker
+- More jumpscare varieties
+- Rare "mega jumpscare" event
+- Jumpscare settings (enable/disable, adjust probability)
 
 ## 🐛 Recent Bug Fixes & Updates
 
 ### Latest Changes (October 2025)
+- **NEW**: 👻 Jumpscare System - 50% chance of jumpscare on complete losses!
+  - Random selection from multiple jumpscare videos
+  - Fullscreen overlay with click-to-close functionality
+  - 300ms delay to let players see their loss first
+  - Safety auto-close after 10 seconds
 - **Fixed**: 3 matching symbols now ALWAYS trigger jackpot (no probability roll needed)
 - **Updated**: Privilege Status now has capped bonuses (30% jackpot, 60% two-match)
 - **Added**: Progressive tax system for Privilege Status (10% → 99%)
@@ -335,6 +396,7 @@ Feel free to fork, modify, and create pull requests! Some ideas for enhancements
 - **Added**: "?" Help button for game guidelines (top-right corner)
 - **Improved**: Status effects only activate after first spin
 - **Enhanced**: Game guidelines with complete rules and strategies
+- **Added**: Modular jumpscare system with easy video customization
 
 ## 📄 License
 
