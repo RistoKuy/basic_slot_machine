@@ -278,14 +278,14 @@ function showInstructions() {
                 
                 <div class="border-b border-yellow-600 pb-2">
                     <div class="font-bold text-yellow-400">👑 PRIVILEGE STATUS (Risk/Reward)</div>
-                    <div class="text-purple-300">Activates: 3 wins in a row + credits &gt; 1000</div>
+                    <div class="text-purple-300">Activates: Credits reach 1000 or more</div>
                     <div class="text-green-300">Bonuses:</div>
                     <div>• +1% jackpot per 50 credits bet (Max 30%)</div>
                     <div>• +5% two-match per 50 credits bet (Max 60%)</div>
                     <div class="text-red-300">Penalties:</div>
                     <div>• Tax on ALL wins (starts 10%, +10% per jackpot, max 99%)</div>
                     <div>• NO consolation prize on losses</div>
-                    <div>• Deactivates after 3 losses in a row</div>
+                    <div>• Deactivates when credits drop below 1000</div>
                 </div>
                 
                 <div>

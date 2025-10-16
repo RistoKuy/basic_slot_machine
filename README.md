@@ -35,9 +35,9 @@ The game notices when you're struggling and gives you a helping hand!
 - **Purpose**: Helps struggling players get back in the game without making it too easy
 
 #### 👑 **Privilege Status** - High Risk, High Reward
-You're on a winning streak, but the house wants its cut - and it gets greedier!
+You're rich, so the house wants its cut - and it gets greedier!
 
-- **Activates**: Win 3 times in a row AND have more than 1000 credits
+- **Activates**: When credits reach 1000 or more
 - **Benefits**:
   - Every 50 credits you bet increases jackpot chance by +1% (capped at +30%)
   - Every 50 credits you bet increases two-match chance by +5% (capped at +60%)
@@ -47,8 +47,8 @@ You're on a winning streak, but the house wants its cut - and it gets greedier!
   - **No Consolation**: Total loss on non-matches - you get NOTHING back
   - Tax resets when status deactivates
 - **Visual Indicator**: Purple pulsing border showing current tax rate and bonus caps
-- **Deactivates**: Lose 3 times in a row
-- **Purpose**: Extreme risk/reward - the more you win, the more you pay!
+- **Deactivates**: When credits drop below 1000
+- **Purpose**: Extreme risk/reward - the wealthier you are, the more you pay!
 
 ### 🎁 First-Time Player Bonuses
 - **First 3 Spins**: Enhanced win chances to help you learn the game
@@ -303,10 +303,11 @@ Perfect for learning modern JavaScript game development!
 - **Two-Match Bonus**: 150% of bet (guaranteed win)
 - **Jackpot**: Symbol multiplier × bet amount (always triggers on 3 matches!)
 - **Pity Status**: Activates at <50 credits, bonus chances up to +50% jackpot
-- **Privilege Status**: Activates with 3-win streak + 1000 credits
+- **Privilege Status**: Activates at >=1000 credits
   - Bonuses capped at +30% jackpot, +60% two-match
   - Progressive tax: 10% → 99% (increases +10% per jackpot)
   - No consolation prize on losses
+  - Deactivates when credits drop below 1000
 - **Game Over**: When credits drop below 5 (minimum bet)
 - **Status Effects**: Only activate after first spin (not during betting)
 

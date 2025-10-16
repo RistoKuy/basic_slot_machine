@@ -41,17 +41,16 @@ class StatusEffects {
         }
 
         // Check for Privilege Status activation
-        if (!this.privilegeStatus && this.game.consecutiveWins >= 3 && this.game.credits > 1000) {
+        if (!this.privilegeStatus && this.game.credits >= 1000) {
             this.privilegeStatus = true;
             this.privilegeTaxRate = 0.10; // Reset tax rate when privilege activates
             this.showStatusActivation('privilege');
         }
 
         // Check for Privilege Status deactivation
-        if (this.privilegeStatus && this.game.consecutiveLosses >= 3) {
+        if (this.privilegeStatus && this.game.credits < 1000) {
             this.privilegeStatus = false;
             this.privilegeTaxRate = 0.10; // Reset tax rate when privilege deactivates
-            this.game.consecutiveWins = 0; // Reset win streak
             this.showStatusDeactivation('privilege');
         }
     }
@@ -186,16 +185,18 @@ class StatusEffects {
                 <div class="bg-purple-900 rounded-lg p-4 sm:p-8 border-4 border-purple-400 max-w-md w-full text-center animate-pulse">
                     <h3 class="text-2xl sm:text-3xl font-bold text-purple-300 mb-4">👑 PRIVILEGE STATUS ACTIVATED 👑</h3>
                     <div class="text-purple-200 mb-4">
-                        <p class="text-lg font-bold mb-2">You're on fire!</p>
-                        <p class="text-sm">Every 50 credits bet increases:</p>
-                        <p class="text-sm">• Jackpot chance by +1%</p>
-                        <p class="text-sm">• Two-match chance by +5%</p>
-                        <p class="text-xs mt-2 text-red-300">But you lose 10% credits on each win!</p>
-                        <p class="text-xs text-purple-300">Active until you lose 3 times in a row</p>
+                        <p class="text-lg font-bold mb-2">You're rich! Time to pay taxes!</p>
+                        <p class="text-sm mb-2">Bonuses (capped):</p>
+                        <p class="text-sm">• Jackpot chance: +1% per 50 credits bet (Max 30%)</p>
+                        <p class="text-sm">• Two-match chance: +5% per 50 credits bet (Max 60%)</p>
+                        <p class="text-xs mt-2 text-red-300 font-bold">⚠️ PENALTIES:</p>
+                        <p class="text-xs text-red-300">• Progressive Tax: 10% → 99% (+10% per jackpot)</p>
+                        <p class="text-xs text-red-300">• NO consolation prize on losses!</p>
+                        <p class="text-xs mt-2 text-purple-300">Active until credits drop below 1000</p>
                     </div>
                     <button onclick="this.parentElement.parentElement.remove()" 
                             class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full">
-                        👑 EMBRACE THE POWER!
+                        👑 ACCEPT THE CHALLENGE!
                     </button>
                 </div>
             `;
@@ -230,7 +231,8 @@ class StatusEffects {
             modal.innerHTML = `
                 <div class="bg-gray-800 rounded-lg p-4 border-2 border-gray-400 max-w-sm w-full text-center">
                     <h3 class="text-lg font-bold text-gray-300 mb-2">👑 Privilege Status Ended</h3>
-                    <p class="text-sm text-gray-400">Your winning streak is over. Back to normal odds.</p>
+                    <p class="text-sm text-gray-400">Your credits dropped below 1000. Back to normal odds.</p>
+                    <p class="text-xs text-green-400 mt-2">Tax rate reset & consolation prizes restored!</p>
                     <button onclick="this.parentElement.parentElement.remove()" 
                             class="mt-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full">
                         OK
