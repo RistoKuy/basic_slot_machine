@@ -68,11 +68,11 @@ You're rich, so the house wants its cut - and it gets greedier!
   - Blue Lobster jumpscare
   - Foxy (FNAF) jumpscare
 - Fullscreen video overlay that plays automatically at full volume
-- **1-second delay** after seeing your loss - gives you time to process the result first
+- **0.3-seconds delay** after seeing your loss - gives you time to process the result first
 - **Close the jumpscare** by:
   - Clicking/tapping anywhere on the screen
   - Waiting for the video to end naturally
-  - Automatic safety close after 10 seconds
+  - Automatic safety close after 5 seconds
 - Prevents multiple jumpscares from overlapping
 - Adds an extra layer of excitement (or terror!) to your losing streaks!
 
@@ -151,15 +151,6 @@ You're rich, so the house wants its cut - and it gets greedier!
 
 ## 📁 Project Structure
 
-### Architecture
-
-The codebase has been refactored from a single monolithic `controller.js` (500+ lines) into a modular architecture with separate responsibilities:
-
-- **Separation of Concerns**: Each system has its own dedicated file
-- **Maintainability**: Easier to find, modify, and debug specific features  
-- **Scalability**: Simple to add new features without bloating existing files
-- **Code Organization**: Logical grouping of related functionality
-
 ### File Structure
 
 ```
@@ -224,7 +215,7 @@ basic_slot_machine/
 - Multiple jumpscare video management
 - Fullscreen overlay presentation
 - Click-to-close functionality
-- Safety timeout (10 seconds)
+- Safety timeout (5 seconds)
 - Prevents overlapping jumpscares
 
 **game_mechanics/GameLogic.js**:
@@ -241,16 +232,6 @@ basic_slot_machine/
 - Auto-spin functionality
 - Keyboard shortcuts
 - Special event handlers
-
-## 🛠️ Technical Features
-
-- **Pure Vanilla JavaScript**: No frameworks, no dependencies
-- **Modern ES6+**: Classes, async/await, arrow functions
-- **Modular Design**: Clean separation of concerns
-- **Local Storage**: Persistent stats and preferences
-- **Responsive CSS**: Mobile-first design with Tailwind CSS
-- **Smooth Animations**: CSS keyframes and transitions
-- **Event-Driven**: Efficient event handling and state management
 
 ## 🚀 Setup & Installation
 
@@ -334,20 +315,6 @@ constructor() {
 }
 ```
 
-## 🎓 Learning Resources
-
-This project demonstrates:
-- **Class-based JavaScript architecture**
-- **Module pattern and code organization**
-- **Async/await for animations**
-- **LocalStorage API for persistence**
-- **DOM manipulation and event handling**
-- **CSS animations and transitions**
-- **Probability and game balance**
-- **Responsive design principles**
-
-Perfect for learning modern JavaScript game development!
-
 ## 📝 Game Rules Summary
 
 - **Starting Credits**: 100
@@ -364,22 +331,6 @@ Perfect for learning modern JavaScript game development!
 - **Game Over**: When credits drop below 5 (minimum bet)
 - **Status Effects**: Only activate after first spin (not during betting)
 
-## 🤝 Contributing
-
-Feel free to fork, modify, and create pull requests! Some ideas for enhancements:
-- Additional symbol types
-- More status effects
-- Achievement system (e.g., "Survived 10 jumpscares")
-- Sound settings panel (mute option)
-- Difficulty modes
-- Daily challenges
-- Leaderboard system
-- Visual tax rate indicator
-- Privilege tax history tracker
-- More jumpscare varieties
-- Rare "mega jumpscare" event
-- Jumpscare settings (enable/disable, adjust probability)
-
 ## 🐛 Recent Bug Fixes & Updates
 
 ### Latest Changes (October 2025)
@@ -387,7 +338,7 @@ Feel free to fork, modify, and create pull requests! Some ideas for enhancements
   - Random selection from multiple jumpscare videos
   - Fullscreen overlay with click-to-close functionality
   - 300ms delay to let players see their loss first
-  - Safety auto-close after 10 seconds
+  - Safety auto-close after 5 seconds
 - **Fixed**: 3 matching symbols now ALWAYS trigger jackpot (no probability roll needed)
 - **Updated**: Privilege Status now has capped bonuses (30% jackpot, 60% two-match)
 - **Added**: Progressive tax system for Privilege Status (10% → 99%)
