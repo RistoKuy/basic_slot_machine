@@ -9,6 +9,7 @@ function loadGameMechanics() {
             'BettingSystem.js',
             'GameLogic.js',
             'GameFeatures.js',
+            'JumpscareSystem.js',
             'GameController.js'
         ];
 

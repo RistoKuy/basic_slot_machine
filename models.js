@@ -288,10 +288,21 @@ function showInstructions() {
                     <div>• Deactivates when credits drop below 1000</div>
                 </div>
                 
+                <div class="border-b border-yellow-600 pb-2">
+                    <div class="font-bold text-yellow-400">👻 JUMPSCARE SYSTEM</div>
+                    <div class="text-red-300">When you get NO matches (all different):</div>
+                    <div>• <strong>50% chance</strong> of jumpscare trigger!</div>
+                    <div>• Random scary video plays fullscreen</div>
+                    <div>• Click anywhere to close immediately</div>
+                    <div>• Auto-closes after 10 seconds</div>
+                    <div class="mt-1 text-yellow-200">⚠️ Play with caution - not for the faint of heart!</div>
+                </div>
+                
                 <div>
                     <div class="font-bold text-yellow-400">🎁 EXTRAS</div>
                     <div>• First 3 spins: Enhanced win chances!</div>
                     <div>• <strong>Konami Code</strong>: ↑↑↓↓←→←→BA for 1000 credits</div>
+                    <div>• Press <strong>S</strong> anytime to view statistics</div>
                     <div>• Check the paytable below for jackpot values!</div>
                 </div>
             </div>
